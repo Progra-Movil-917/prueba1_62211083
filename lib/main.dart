@@ -10,65 +10,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Color Change Widget',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const ColorChangeWidget(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title});
-
-  final String title;
+class ColorChangeWidget extends StatefulWidget {
+  const ColorChangeWidget({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _ColorChangeWidgetState createState() => _ColorChangeWidgetState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  List<Color> colors = [Colors.blue, Colors.green, Colors.red];
-  int colorIndex = 0;
+class _ColorChangeWidgetState extends State<ColorChangeWidget> {
+  // Almacena el color
+  Color _currentColor = Colors.blue;
 
-  void _incrementCounter() {
+  List<Color> _colorOptions = [Colors.blue, Colors.red];
+  int _colorIndex = 0;
+
+  //Metodo del cambio de color
+  void _changeColor() {
     setState(() {
-      _counter++;
-      colorIndex = (_counter - 1) % colors.length;
+      _currentColor = _colorOptions[_colorIndex];
+      _colorIndex = (_colorIndex + 1) % _colorOptions.length;
     });
   }
 
+//llamando al metodo de cambiar color en el contenedor
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text('Cambio de Color'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: TextStyle(
-                color: colors[colorIndex],
-                fontSize: 24.0,
-              ),
-            ),
-          ],
+      body: GestureDetector(
+        onTap: _changeColor,
+        child: Container(
+          width: 200,
+          height: 200,
+          color: _currentColor,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
